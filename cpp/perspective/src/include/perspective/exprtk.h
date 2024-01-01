@@ -36,10 +36,14 @@ namespace details {
             inline T const_e_impl(t_tscalar_type_tag);
 
             template <typename T>
-            inline int to_int32_impl(const T& v, t_tscalar_type_tag);
+            inline std::int32_t to_int32_impl(const T& v, t_tscalar_type_tag);
 
             template <typename T>
-            inline long long int to_int64_impl(const T& v, t_tscalar_type_tag);
+            inline std::int64_t to_int64_impl(const T& v, t_tscalar_type_tag);
+
+            template <typename T>
+            inline std::uint64_t to_uint64_impl(const T& v, t_tscalar_type_tag);
+
 
 #define define_unary_function_impl_header(FunctionName)                        \
     template <typename T>                                                      \
@@ -112,9 +116,8 @@ namespace details {
 
 #undef define_binary_function_impl_header
 
-                                            template <typename T>
-                                            inline T
-                and_impl(const T v0, const T v1, t_tscalar_type_tag);
+            template <typename T>
+            inline T and_impl(const T v0, const T v1, t_tscalar_type_tag);
 
             template <typename T>
             inline T or_impl(const T v0, const T v1, t_tscalar_type_tag);
@@ -260,73 +263,98 @@ namespace details {
             }
 
             template <>
-            inline int
+            inline std::int32_t
             to_int32_impl(const t_tscalar& v, t_tscalar_type_tag) {
                 if (!v.is_valid()) {
-                    return std::numeric_limits<int>::quiet_NaN();
+                    return std::numeric_limits<std::int32_t>::quiet_NaN();
                 }
                 switch (v.get_dtype()) {
                     case perspective::t_dtype::DTYPE_INT64:
-                        return static_cast<int>(v.get<std::int64_t>());
+                        return static_cast<std::int32_t>(v.get<std::int64_t>());
                     case perspective::t_dtype::DTYPE_INT32:
-                        return static_cast<int>(v.get<std::int32_t>());
+                        return static_cast<std::int32_t>(v.get<std::int32_t>());
                     case perspective::t_dtype::DTYPE_INT16:
-                        return static_cast<int>(v.get<std::int16_t>());
+                        return static_cast<std::int32_t>(v.get<std::int16_t>());
                     case perspective::t_dtype::DTYPE_INT8:
-                        return static_cast<int>(v.get<std::int8_t>());
+                        return static_cast<std::int32_t>(v.get<std::int8_t>());
                     case perspective::t_dtype::DTYPE_UINT64:
-                        return static_cast<int>(v.get<std::uint64_t>());
+                        return static_cast<std::int32_t>(v.get<std::uint64_t>());
                     case perspective::t_dtype::DTYPE_UINT32:
-                        return static_cast<int>(v.get<std::uint32_t>());
+                        return static_cast<std::int32_t>(v.get<std::uint32_t>());
                     case perspective::t_dtype::DTYPE_UINT16:
-                        return static_cast<int>(v.get<std::uint16_t>());
+                        return static_cast<std::int32_t>(v.get<std::uint16_t>());
                     case perspective::t_dtype::DTYPE_UINT8:
-                        return static_cast<int>(v.get<std::uint8_t>());
+                        return static_cast<std::int32_t>(v.get<std::uint8_t>());
                     case perspective::t_dtype::DTYPE_FLOAT64:
-                        return static_cast<int>(v.get<double>());
+                        return static_cast<std::int32_t>(v.get<double>());
                     case perspective::t_dtype::DTYPE_FLOAT32:
-                        return static_cast<int>(v.get<float>());
+                        return static_cast<std::int32_t>(v.get<float>());
                     default:
-                        return std::numeric_limits<int>::quiet_NaN();
+                        return std::numeric_limits<std::int32_t>::quiet_NaN();
                 }
             }
 
             template <>
-            inline long long int
+            inline std::int64_t
             to_int64_impl(const t_tscalar& v, t_tscalar_type_tag) {
                 if (!v.is_valid()) {
-                    return std::numeric_limits<long long int>::quiet_NaN();
+                    return std::numeric_limits<std::int64_t>::quiet_NaN();
                 }
                 switch (v.get_dtype()) {
                     case perspective::t_dtype::DTYPE_INT64:
-                        return static_cast<long long int>(v.get<std::int64_t>()
-                        );
+                        return static_cast<std::int64_t>(v.get<std::int64_t>());
                     case perspective::t_dtype::DTYPE_INT32:
-                        return static_cast<long long int>(v.get<std::int32_t>()
-                        );
+                        return static_cast<std::int64_t>(v.get<std::int32_t>());
                     case perspective::t_dtype::DTYPE_INT16:
-                        return static_cast<long long int>(v.get<std::int16_t>()
-                        );
+                        return static_cast<std::int64_t>(v.get<std::int16_t>());
                     case perspective::t_dtype::DTYPE_INT8:
-                        return static_cast<long long int>(v.get<std::int8_t>());
+                        return static_cast<std::int64_t>(v.get<std::int8_t>());
                     case perspective::t_dtype::DTYPE_UINT64:
-                        return static_cast<long long int>(v.get<std::uint64_t>()
-                        );
+                        return static_cast<std::int64_t>(v.get<std::uint64_t>());
                     case perspective::t_dtype::DTYPE_UINT32:
-                        return static_cast<long long int>(v.get<std::uint32_t>()
-                        );
+                        return static_cast<std::int64_t>(v.get<std::uint32_t>());
                     case perspective::t_dtype::DTYPE_UINT16:
-                        return static_cast<long long int>(v.get<std::uint16_t>()
-                        );
+                        return static_cast<std::int64_t>(v.get<std::uint16_t>());
                     case perspective::t_dtype::DTYPE_UINT8:
-                        return static_cast<long long int>(v.get<std::uint8_t>()
-                        );
+                        return static_cast<std::int64_t>(v.get<std::uint8_t>());
                     case perspective::t_dtype::DTYPE_FLOAT64:
-                        return static_cast<long long int>(v.get<double>());
+                        return static_cast<std::int64_t>(v.get<double>());
                     case perspective::t_dtype::DTYPE_FLOAT32:
-                        return static_cast<long long int>(v.get<float>());
+                        return static_cast<std::int64_t>(v.get<float>());
                     default:
-                        return std::numeric_limits<long long int>::quiet_NaN();
+                        return std::numeric_limits<std::int64_t>::quiet_NaN();
+                }
+            }
+
+            template <>
+            inline std::uint64_t
+            to_uint64_impl(const t_tscalar& v, t_tscalar_type_tag) {
+                if (!v.is_valid()) {
+                    return std::numeric_limits<std::uint64_t>::quiet_NaN();
+                }
+                switch (v.get_dtype()) {
+                    case perspective::t_dtype::DTYPE_INT64:
+                        return static_cast<std::uint64_t>(v.get<std::int64_t>());
+                    case perspective::t_dtype::DTYPE_INT32:
+                        return static_cast<std::uint64_t>(v.get<std::int32_t>());
+                    case perspective::t_dtype::DTYPE_INT16:
+                        return static_cast<std::uint64_t>(v.get<std::int16_t>());
+                    case perspective::t_dtype::DTYPE_INT8:
+                        return static_cast<std::uint64_t>(v.get<std::int8_t>());
+                    case perspective::t_dtype::DTYPE_UINT64:
+                        return static_cast<std::uint64_t>(v.get<std::uint64_t>());
+                    case perspective::t_dtype::DTYPE_UINT32:
+                        return static_cast<std::uint64_t>(v.get<std::uint32_t>());
+                    case perspective::t_dtype::DTYPE_UINT16:
+                        return static_cast<std::uint64_t>(v.get<std::uint16_t>());
+                    case perspective::t_dtype::DTYPE_UINT8:
+                        return static_cast<std::uint64_t>(v.get<std::uint8_t>());
+                    case perspective::t_dtype::DTYPE_FLOAT64:
+                        return static_cast<std::uint64_t>(v.get<double>());
+                    case perspective::t_dtype::DTYPE_FLOAT32:
+                        return static_cast<std::uint64_t>(v.get<float>());
+                    default:
+                        return std::numeric_limits<std::uint64_t>::quiet_NaN();
                 }
             }
 
