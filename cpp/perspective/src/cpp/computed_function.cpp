@@ -13,8 +13,10 @@
 #include <perspective/computed_function.h>
 #include <perspective/gnode_state.h>
 #include <perspective/column.h>
-#include <cmath>
 
+#include <array>
+#include <cmath>
+#include <random>
 #include <utility>
 
 namespace perspective::computed_function {
@@ -2329,12 +2331,15 @@ vlookup::operator()(t_parameter_list parameters) {
     return rval;
 }
 
-// Set up random number generator
-std::default_random_engine random::RANDOM_ENGINE = std::default_random_engine();
-std::uniform_real_distribution<double> random::DISTRIBUTION =
-    std::uniform_real_distribution<double>(0, 1);
-
-random::random() : exprtk::igeneric_function<t_tscalar>("Z") {}
+random::random()
+: exprtk::igeneric_function<t_tscalar>("Z")
+{
+    std::random_device device;
+    std::array<unsigned int,std::mt19937::state_size> seed;
+    std::generate_n(seed.data(), seed.size(), std::ref(device));
+    std::seed_seq seq(std::begin(seed), std::end(seed));
+    generator.seed(seq);
+}
 
 random::~random() = default;
 
@@ -2342,7 +2347,7 @@ t_tscalar
 random::operator()(t_parameter_list parameters) {
     t_tscalar rval;
     rval.clear();
-    rval.set(random::DISTRIBUTION(random::RANDOM_ENGINE));
+    rval.set(distribution(generator));
     return rval;
 }
 } // namespace perspective::computed_function
